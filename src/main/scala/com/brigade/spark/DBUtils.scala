@@ -72,8 +72,9 @@ class DBUtils (conf: ImportConfig) {
     NamedDB(conf.database) readOnly { implicit session =>
       val tableNoQuotes = SQLSyntax.createUnsafely(tableName)
       val idFieldNoQuotes = SQLSyntax.createUnsafely(columnName)
+      val dbNoQuotes = SQLSyntax.createUnsafely(conf.database)
 
-      sql"SELECT max($idFieldNoQuotes) as max_val from $tableNoQuotes"
+      sql"SELECT max($idFieldNoQuotes) as max_val from $dbNoQuotes.$tableNoQuotes"
         .map { rs =>
           rs.long("max_val")
         }
